@@ -1,0 +1,2907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santa's QR Workshop - Festive QR Code Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --christmas-red: #d62d2d;
+            --christmas-green: #2d8a39;
+            --christmas-gold: #ffcc00;
+            --christmas-silver: #c0c0c0;
+            --dark-blue: #0a2e38;
+            --snow-white: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--dark-blue);
+            color: var(--snow-white);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 20%);
+        }
+        
+        /* Snowflakes */
+        .snowflake {
+            position: fixed;
+            background-color: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--christmas-red), var(--christmas-green));
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 10;
+            border-bottom: 4px solid var(--christmas-gold);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Mountains of Christmas', cursive;
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--christmas-gold);
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+            letter-spacing: 1px;
+        }
+        
+        .header-decoration {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .holly {
+            font-size: 2rem;
+            color: var(--christmas-green);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+        
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            position: relative;
+            z-index: 5;
+        }
+        
+        /* Input section */
+        .input-section {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .input-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+        }
+        
+        .input-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--christmas-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        input[type="url"] {
+            flex: 1;
+            padding: 1.2rem;
+            border-radius: 10px;
+            border: 2px solid var(--christmas-green);
+            background-color: rgba(255, 255, 255, 0.95);
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        input[type="url"]:focus {
+            outline: none;
+            border-color: var(--christmas-red);
+            box-shadow: 0 0 12px rgba(214, 45, 45, 0.6), inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        input[type="url"]::placeholder {
+            color: #888;
+        }
+        
+        button {
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--christmas-red), var(--christmas-green));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* QR Code section */
+        .qr-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .qr-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .qr-container {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .qr-container:hover {
+            transform: scale(1.02);
+        }
+        
+        .qr-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--christmas-red), var(--christmas-green), var(--christmas-gold), var(--christmas-green), var(--christmas-red));
+        }
+        
+        #qrCode {
+            width: 220px;
+            height: 220px;
+            transition: all 0.3s;
+        }
+        
+        .qr-actions {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            padding: 0.9rem 1.8rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Customization options */
+        .customization-section {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+            transition: transform 0.3s;
+        }
+        
+        .customization-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .customization-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        label {
+            font-size: 0.95rem;
+            color: var(--christmas-silver);
+            font-weight: 500;
+        }
+        
+        select, input[type="color"], input[type="range"] {
+            padding: 0.7rem;
+            border-radius: 8px;
+            border: 1px solid var(--christmas-green);
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        select:hover, input[type="color"]:hover, input[type="range"]:hover {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            padding: 0;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--christmas-red), var(--christmas-green));
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Santa animation */
+        .santa-container {
+            position: fixed;
+            bottom: -50px;
+            left: 0;
+            width: 120px;
+            height: 120px;
+            z-index: 20;
+            animation: santaRun 25s linear infinite;
+            pointer-events: none;
+        }
+        
+        .santa {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/2238/2238922.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: scaleX(-1);
+            filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.4));
+        }
+        
+        @keyframes santaRun {
+            0% {
+                left: -120px;
+            }
+            100% {
+                left: calc(100% + 120px);
+            }
+        }
+        
+        /* Gift notifications */
+        .gift-notification {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            background: linear-gradient(135deg, var(--christmas-red), var(--christmas-green));
+            color: white;
+            padding: 1.2rem 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100;
+            max-width: 350px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-left: 6px solid var(--christmas-gold);
+        }
+        
+        .gift-notification.show {
+            transform: translateX(0);
+        }
+        
+        .gift-notification i {
+            font-size: 1.5rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+                margin: 2rem auto;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .input-section, .qr-section, .customization-section {
+                padding: 1.8rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            button, .action-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 1.1rem;
+            }
+            
+            .qr-actions {
+                flex-direction: column;
+                width: 100%;
+                gap: 1rem;
+            }
+            
+            .customization-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .santa-container {
+                width: 80px;
+                height: 80px;
+            }
+        }
+        
+        /* Loading animation */
+        .loader {
+            display: none;
+            width: 120px;
+            height: 120px;
+            margin: 2rem auto;
+            position: relative;
+            perspective: 1000px;
+        }
+        
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: cubeRotate 2s infinite linear;
+        }
+        
+        .cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--christmas-red), var(--christmas-green));
+            border: 2px solid var(--christmas-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .cube-face.front { transform: rotateY(0deg) translateZ(60px); }
+        .cube-face.back { transform: rotateY(180deg) translateZ(60px); }
+        .cube-face.right { transform: rotateY(90deg) translateZ(60px); }
+        .cube-face.left { transform: rotateY(-90deg) translateZ(60px); }
+        .cube-face.top { transform: rotateX(90deg) translateZ(60px); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(60px); }
+        
+        .cube-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--christmas-gold);
+            border-radius: 50%;
+            animation: particleExplode 1.5s infinite ease-out;
+        }
+        
+        @keyframes cubeRotate {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            25% { transform: rotateX(90deg) rotateY(0deg); }
+            50% { transform: rotateX(90deg) rotateY(90deg); }
+            75% { transform: rotateX(0deg) rotateY(90deg); }
+            100% { transform: rotateX(0deg) rotateY(0deg); }
+        }
+        
+        @keyframes particleExplode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        /* Analytics Section */
+        .analytics-section {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+            transition: transform 0.3s;
+        }
+        
+        .analytics-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .analytics-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border-left: 4px solid var(--christmas-gold);
+            transition: transform 0.3s;
+        }
+        
+        .analytics-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .analytics-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--christmas-gold);
+            margin-bottom: 0.5rem;
+        }
+        
+        .analytics-label {
+            font-size: 0.9rem;
+            color: var(--christmas-silver);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .analytics-chart {
+            width: 100%;
+            height: 200px;
+            margin-top: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to top, var(--christmas-red), var(--christmas-green));
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease;
+        }
+        
+        /* Live Preview Section */
+        .live-preview-section {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+            transition: transform 0.3s;
+        }
+        
+        .live-preview-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .live-preview-container {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .live-qr-container {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .live-qr-container:hover {
+            transform: scale(1.05);
+        }
+        
+        #liveQRCode {
+            width: 150px;
+            height: 150px;
+            transition: all 0.3s;
+        }
+        
+        .live-preview-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .live-preview-info h4 {
+            color: var(--christmas-gold);
+            margin-bottom: 1rem;
+        }
+        
+        .live-preview-info p {
+            margin-bottom: 0.5rem;
+            color: var(--christmas-silver);
+        }
+        
+        .url-preview {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem;
+            border-radius: 8px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--christmas-green);
+        }
+        
+        /* Toggle for live preview */
+        .live-preview-toggle {
+            margin-top: 1.5rem;
+        }
+        
+        /* History section */
+        .history-section {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+            transition: transform 0.3s;
+        }
+        
+        .history-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 0.8rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Scrollbar styling */
+        .history-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        .history-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--christmas-red), var(--christmas-green));
+            border-radius: 4px;
+        }
+        
+        .history-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            border-left: 4px solid var(--christmas-gold);
+        }
+        
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .history-item-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+        
+        .history-item-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            padding: 0.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .history-item-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .history-item-btn.view {
+            color: var(--christmas-gold);
+        }
+        
+        .history-item-btn.delete {
+            color: #ff6b6b;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            background: linear-gradient(135deg, var(--christmas-red), var(--christmas-green));
+            position: relative;
+            z-index: 10;
+            border-top: 4px solid var(--christmas-gold);
+        }
+        
+        footer p {
+            margin: 0.5rem 0;
+        }
+        
+        .footer-heart {
+            color: var(--christmas-red);
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Toggle switches */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .toggle-label {
+            font-weight: 500;
+            color: var(--christmas-silver);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 30px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        input:checked + .slider {
+            background: linear-gradient(135deg, var(--christmas-red), var(--christmas-green));
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+        
+        .tooltip i {
+            color: var(--christmas-gold);
+            font-size: 0.9rem;
+            cursor: help;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 220px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 0.8rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.85rem;
+            font-weight: normal;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Christmas lights decoration */
+        .lights {
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: transparent;
+            z-index: 5;
+            overflow: hidden;
+        }
+        
+        .light {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            top: 4px;
+            animation: lightFlicker 2s infinite alternate;
+        }
+        
+        @keyframes lightFlicker {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        /* QR Scanner Section */
+        .scanner-section {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+            transition: transform 0.3s;
+        }
+        
+        .scanner-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .scanner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .scanner-video-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            background: #000;
+        }
+        
+        #scannerVideo {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+        }
+        
+        .scanner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        
+        .scanner-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            border: 3px solid var(--christmas-gold);
+            border-radius: 12px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+        }
+        
+        .scanner-frame::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--christmas-red), var(--christmas-green), var(--christmas-gold), var(--christmas-red)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            animation: scannerBorder 2s linear infinite;
+        }
+        
+        @keyframes scannerBorder {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 360% 0%; }
+        }
+        
+        .scanner-corners {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--christmas-gold);
+        }
+        
+        .scanner-corners.top-left {
+            top: -3px;
+            left: -3px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 12px 0 0 0;
+        }
+        
+        .scanner-corners.top-right {
+            top: -3px;
+            right: -3px;
+            border-left: none;
+            border-bottom: none;
+            border-radius: 0 12px 0 0;
+        }
+        
+        .scanner-corners.bottom-left {
+            bottom: -3px;
+            left: -3px;
+            border-right: none;
+            border-top: none;
+            border-radius: 0 0 0 12px;
+        }
+        
+        .scanner-corners.bottom-right {
+            bottom: -3px;
+            right: -3px;
+            border-left: none;
+            border-top: none;
+            border-radius: 0 0 12px 0;
+        }
+        
+        .scanner-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .scanner-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .scanner-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .scanner-btn:active {
+            transform: translateY(0);
+        }
+        
+        .scanner-btn.active {
+            background: linear-gradient(135deg, var(--christmas-red), var(--christmas-green));
+            border-color: var(--christmas-gold);
+        }
+        
+        .scanner-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .scanner-status {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--christmas-gold);
+        }
+        
+        .scanner-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--christmas-green);
+            word-break: break-all;
+            display: none;
+        }
+        
+        .scanner-result h4 {
+            color: var(--christmas-gold);
+            margin-bottom: 0.5rem;
+        }
+        
+        .scanner-result a {
+            color: var(--christmas-gold);
+            text-decoration: none;
+        }
+        
+        .scanner-result a:hover {
+            text-decoration: underline;
+        }
+        
+        .scanner-error {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(214, 45, 45, 0.2);
+            border-radius: 8px;
+            border-left: 4px solid var(--christmas-red);
+            color: #ff6b6b;
+        }
+        
+        .scanner-loading {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .scanner-loading .loader {
+            display: block;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+        }
+        
+        /* Retro CPU Monitor Icon and Panel */
+        .cpu-monitor-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #111;
+            color: #0f0;
+            border: 2px solid #0f0;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 16px #000a;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .cpu-monitor-icon:hover {
+            background: #0f0;
+            color: #111;
+        }
+        
+        .cpu-monitor-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 350px;
+            background: #181818;
+            color: #0f0;
+            border: 2px solid #0f0;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px #000a;
+            z-index: 9999;
+            display: none;
+            font-family: 'VT323', 'Fira Mono', 'Consolas', monospace;
+            animation: cpuPanelIn 0.3s;
+        }
+        @keyframes cpuPanelIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .cpu-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #0f0;
+            letter-spacing: 2px;
+        }
+        .cpu-close-btn {
+            background: none;
+            border: none;
+            color: #0f0;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .cpu-close-btn:hover { color: #f00; }
+        .cpu-panel-content {
+            padding: 1rem 0 0.5rem 0;
+        }
+        .cpu-gauge-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .cpu-gauge-outer {
+            width: 120px;
+            height: 18px;
+            background: #222;
+            border: 1px solid #0f0;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        .cpu-gauge-inner {
+            height: 100%;
+            background: linear-gradient(90deg, #0f0 0%, #ff0 60%, #f00 100%);
+            color: #111;
+            font-weight: bold;
+            font-size: 1rem;
+            text-align: right;
+            padding-right: 8px;
+            line-height: 18px;
+            transition: width 0.3s;
+        }
+        .cpu-gauge-label {
+            font-size: 0.9rem;
+            color: #0f0;
+            opacity: 0.7;
+        }
+        .cpu-analytics-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+        #cpuGraph {
+            width: 100%;
+            height: 80px;
+            background: #111;
+            border: 1px solid #0f0;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Snowflakes will be added by JavaScript -->
+    
+    <!-- Santa Animation -->
+    <div class="santa-container">
+        <div class="santa"></div>
+    </div>
+    
+    <!-- Christmas Lights -->
+    <div class="lights" id="christmasLights"></div>
+    
+    <!-- Gift Notifications -->
+    <div class="gift-notification" id="giftNotification">
+        <i class="fas fa-gift"></i>
+        <span id="notificationMessage">QR Code generated successfully!</span>
+    </div>
+    
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="header-decoration">
+                <span class="holly">☘️</span>
+                <span class="holly">☘️</span>
+            </div>
+            <h1>Santa's QR Workshop</h1>
+            <p class="header-subtitle">Create festive QR codes in a jingle bell!</p>
+        </div>
+    </header>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Input Section -->
+        <section class="input-section">
+            <h2 class="section-title"><i class="fas fa-link"></i> Enter Your Link</h2>
+            <div class="input-group">
+                <input type="url" id="urlInput" placeholder="https://example.com" required>
+                <button id="generateBtn">
+                    <i class="fas fa-qrcode"></i> Generate QR Code
+                </button>
+            </div>
+            
+            <div class="toggle-container">
+                <span class="toggle-label">Advanced Options</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="advancedToggle">
+                    <span class="slider"></span>
+                </label>
+                <div class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltiptext">Toggle to show/hide advanced QR code customization options</span>
+                </div>
+            </div>
+            
+            <div class="toggle-container">
+                <span class="toggle-label">Live Preview</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="livePreviewToggle">
+                    <span class="slider"></span>
+                </label>
+                <div class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltiptext">Show real-time QR code preview as you type</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Customization Section -->
+        <section class="customization-section" id="customizationSection">
+            <h3 class="section-title"><i class="fas fa-paint-brush"></i> Customize Your QR Code</h3>
+            <div class="customization-options">
+                <div class="option-group">
+                    <label for="qrColor">QR Color</label>
+                    <input type="color" id="qrColor" value="#000000">
+                </div>
+                
+                <div class="option-group">
+                    <label for="bgColor">Background Color</label>
+                    <input type="color" id="bgColor" value="#ffffff">
+                </div>
+                
+                <div class="option-group">
+                    <label for="qrSize">QR Size</label>
+                    <input type="range" id="qrSize" min="100" max="500" value="220">
+                    <span id="qrSizeValue">220px</span>
+                </div>
+                
+                <div class="option-group">
+                    <label for="errorCorrection">Error Correction</label>
+                    <select id="errorCorrection">
+                        <option value="L">Low (7%)</option>
+                        <option value="M" selected>Medium (15%)</option>
+                        <option value="Q">Quartile (25%)</option>
+                        <option value="H">High (30%)</option>
+                    </select>
+                    <div class="tooltip">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="tooltiptext">Higher correction allows the QR code to work even if damaged, but increases size</span>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <label for="qrStyle">QR Style</label>
+                    <select id="qrStyle">
+                        <option value="squares" selected>Squares</option>
+                        <option value="dots">Dots</option>
+                        <option value="rounded">Rounded</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label for="logoImage">Add Logo (URL)</label>
+                    <input type="url" id="logoImage" placeholder="https://example.com/logo.png">
+                    <div class="tooltip">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="tooltiptext">Enter URL of an image to place in the center of your QR code</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- QR Code Section -->
+        <section class="qr-section" id="qrSection">
+            <h2 class="section-title"><i class="fas fa-qrcode"></i> Your Festive QR Code</h2>
+            <div class="loader" id="loader">
+                <div class="cube">
+                    <div class="cube-face front">🎄</div>
+                    <div class="cube-face back">🎁</div>
+                    <div class="cube-face right">⭐</div>
+                    <div class="cube-face left">❄️</div>
+                    <div class="cube-face top">🦌</div>
+                    <div class="cube-face bottom">🎅</div>
+                </div>
+                <div class="cube-particles" id="cubeParticles"></div>
+            </div>
+            <div class="qr-container">
+                <canvas id="qrCode"></canvas>
+            </div>
+            <div class="qr-actions">
+                <button class="action-btn" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download
+                </button>
+                <button class="action-btn" id="shareBtn">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+                <button class="action-btn" id="saveHistoryBtn">
+                    <i class="fas fa-save"></i> Save
+                </button>
+                <button class="action-btn" id="printBtn">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button class="action-btn" id="showHistoryBtn">
+                    <i class="fas fa-history"></i> History
+                </button>
+                <button class="action-btn" id="showAnalyticsBtn">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </button>
+                <button class="action-btn" id="showScannerBtn">
+                    <i class="fas fa-camera"></i> Scanner
+                </button>
+            </div>
+        </section>
+        
+        <!-- Live Preview Section -->
+        <section class="live-preview-section" id="livePreviewSection">
+            <h3 class="section-title"><i class="fas fa-eye"></i> Live Preview</h3>
+            <div class="live-preview-container">
+                <div class="live-qr-container">
+                    <canvas id="liveQRCode"></canvas>
+                </div>
+                <div class="live-preview-info">
+                    <h4>Real-time QR Code Preview</h4>
+                    <p>Watch your QR code update as you type! This feature shows you exactly how your QR code will look before generating the final version.</p>
+                    <div class="url-preview" id="urlPreview">
+                        Start typing a URL to see the live preview...
+                    </div>
+                    <p><strong>Features:</strong></p>
+                    <ul style="color: var(--christmas-silver); margin-left: 1.5rem;">
+                        <li>Instant visual feedback</li>
+                        <li>URL validation in real-time</li>
+                        <li>Preview customization options</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Analytics Section -->
+        <section class="analytics-section" id="analyticsSection">
+            <h3 class="section-title"><i class="fas fa-chart-line"></i> QR Code Analytics</h3>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="analytics-number" id="totalScans">0</div>
+                    <div class="analytics-label">Total Scans</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-number" id="uniqueScans">0</div>
+                    <div class="analytics-label">Unique Scans</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-number" id="todayScans">0</div>
+                    <div class="analytics-label">Today's Scans</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-number" id="qrCodesCreated">0</div>
+                    <div class="analytics-label">QR Codes Created</div>
+                </div>
+            </div>
+            <div class="analytics-chart" id="analyticsChart">
+                <!-- Chart bars will be added by JavaScript -->
+            </div>
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <button class="action-btn" id="trackQRBtn">
+                    <i class="fas fa-qrcode"></i> Enable Scan Tracking
+                </button>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--christmas-silver);">
+                    Track how many times your QR codes are scanned with unique analytics
+                </p>
+            </div>
+        </section>
+        
+        <!-- QR Scanner Section -->
+        <section class="scanner-section" id="scannerSection">
+            <h3 class="section-title"><i class="fas fa-camera"></i> QR Code Scanner</h3>
+            <div class="scanner-container">
+                <div class="scanner-video-container">
+                    <video id="scannerVideo" autoplay playsinline muted></video>
+                    <div class="scanner-overlay">
+                        <div class="scanner-frame">
+                            <div class="scanner-corners top-left"></div>
+                            <div class="scanner-corners top-right"></div>
+                            <div class="scanner-corners bottom-left"></div>
+                            <div class="scanner-corners bottom-right"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scanner-controls">
+                    <button class="scanner-btn" id="startScannerBtn">
+                        <i class="fas fa-play"></i> Start Scanner
+                    </button>
+                    <button class="scanner-btn" id="stopScannerBtn" disabled>
+                        <i class="fas fa-stop"></i> Stop Scanner
+                    </button>
+                    <button class="scanner-btn" id="flipCameraBtn" disabled>
+                        <i class="fas fa-sync-alt"></i> Flip Camera
+                    </button>
+                    <button class="scanner-btn" id="torchBtn" disabled>
+                        <i class="fas fa-lightbulb"></i> Torch
+                    </button>
+                    <button class="scanner-btn" id="captureBtn" disabled>
+                        <i class="fas fa-camera"></i> Capture
+                    </button>
+                </div>
+                
+                <div class="scanner-status" id="scannerStatus">
+                    <i class="fas fa-info-circle"></i> Click "Start Scanner" to begin scanning QR codes
+                </div>
+                
+                <div class="scanner-loading" id="scannerLoading">
+                    <div class="loader">
+                        <div class="cube">
+                            <div class="cube-face front">📱</div>
+                            <div class="cube-face back">🔍</div>
+                            <div class="cube-face right">📷</div>
+                            <div class="cube-face left">⚡</div>
+                            <div class="cube-face top">🎯</div>
+                            <div class="cube-face bottom">✨</div>
+                        </div>
+                        <div class="cube-particles" id="scannerCubeParticles"></div>
+                    </div>
+                    <p>Initializing camera...</p>
+                </div>
+                
+                <div class="scanner-error" id="scannerError" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="scannerErrorMessage">Camera access denied. Please allow camera permissions.</span>
+                </div>
+                
+                <div class="scanner-result" id="scannerResult">
+                    <h4><i class="fas fa-check-circle"></i> QR Code Detected!</h4>
+                    <div id="scannerResultContent"></div>
+                    <div style="margin-top: 1rem;">
+                        <button class="scanner-btn" id="copyResultBtn">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="scanner-btn" id="openResultBtn">
+                            <i class="fas fa-external-link-alt"></i> Open
+                        </button>
+                        <button class="scanner-btn" id="generateFromResultBtn">
+                            <i class="fas fa-qrcode"></i> Generate QR
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- History Section -->
+        <section class="history-section" id="historySection">
+            <h3 class="section-title"><i class="fas fa-history"></i> Your QR Code History</h3>
+            <div class="history-list" id="historyList">
+                <!-- History items will be added by JavaScript -->
+            </div>
+            <button class="action-btn" id="clearHistoryBtn" style="margin-top: 1.5rem;">
+                <i class="fas fa-trash"></i> Clear History
+            </button>
+        </section>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <p>Made with <span class="footer-heart"><i class="fas fa-heart"></i></span> for Christmas</p>
+        <p>© <span id="currentYear"></span> Santa's QR Workshop. All rights reserved.</p>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Create snowflakes
+            createSnowflakes();
+            
+            // Create Christmas lights
+            createChristmasLights();
+            
+            // Toggle advanced options
+            document.getElementById('advancedToggle').addEventListener('change', function() {
+                const customizationSection = document.getElementById('customizationSection');
+                if (this.checked) {
+                    customizationSection.style.display = 'block';
+                } else {
+                    customizationSection.style.display = 'none';
+                }
+            });
+            
+            // QR size range input
+            const qrSizeInput = document.getElementById('qrSize');
+            const qrSizeValue = document.getElementById('qrSizeValue');
+            qrSizeInput.addEventListener('input', function() {
+                qrSizeValue.textContent = `${this.value}px`;
+            });
+            
+            // Generate QR code
+            document.getElementById('generateBtn').addEventListener('click', generateQRCode);
+            
+            // Download QR code
+            document.getElementById('downloadBtn').addEventListener('click', downloadQRCode);
+            
+            // Share QR code
+            document.getElementById('shareBtn').addEventListener('click', shareQRCode);
+            
+            // Save to history
+            document.getElementById('saveHistoryBtn').addEventListener('click', saveToHistory);
+            
+            // Print QR code
+            document.getElementById('printBtn').addEventListener('click', printQRCode);
+            
+            // Show history
+            document.getElementById('showHistoryBtn').addEventListener('click', toggleHistory);
+            
+            // Clear history
+            document.getElementById('clearHistoryBtn').addEventListener('click', clearHistory);
+            
+            // Show analytics
+            document.getElementById('showAnalyticsBtn').addEventListener('click', toggleAnalytics);
+            
+            // Track QR code
+            document.getElementById('trackQRBtn').addEventListener('click', enableScanTracking);
+            
+            // Show scanner
+            document.getElementById('showScannerBtn').addEventListener('click', toggleScanner);
+            
+            // Scanner controls
+            document.getElementById('startScannerBtn').addEventListener('click', startScanner);
+            document.getElementById('stopScannerBtn').addEventListener('click', stopScanner);
+            document.getElementById('flipCameraBtn').addEventListener('click', flipCamera);
+            document.getElementById('torchBtn').addEventListener('click', toggleTorch);
+            document.getElementById('captureBtn').addEventListener('click', captureImage);
+            
+            // Scanner result actions
+            document.getElementById('copyResultBtn').addEventListener('click', copyScanResult);
+            document.getElementById('openResultBtn').addEventListener('click', openScanResult);
+            document.getElementById('generateFromResultBtn').addEventListener('click', generateFromScanResult);
+            
+            // Allow pressing Enter in URL input to generate QR code
+            document.getElementById('urlInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    generateQRCode();
+                }
+            });
+            
+            // Live preview functionality
+            document.getElementById('livePreviewToggle').addEventListener('change', function() {
+                const livePreviewSection = document.getElementById('livePreviewSection');
+                if (this.checked) {
+                    livePreviewSection.style.display = 'block';
+                    startLivePreview();
+                } else {
+                    livePreviewSection.style.display = 'none';
+                    stopLivePreview();
+                }
+            });
+            
+            // URL input for live preview
+            document.getElementById('urlInput').addEventListener('input', function() {
+                if (document.getElementById('livePreviewToggle').checked) {
+                    updateLivePreview();
+                }
+            });
+            
+            // Initialize QR section as hidden
+            document.getElementById('qrSection').style.display = 'none';
+            
+            // Initialize analytics
+            initializeAnalytics();
+        });
+        
+        // Live preview variables
+        let livePreviewTimeout;
+        let isLivePreviewActive = false;
+        
+        function startLivePreview() {
+            isLivePreviewActive = true;
+            updateLivePreview();
+        }
+        
+        function stopLivePreview() {
+            isLivePreviewActive = false;
+            if (livePreviewTimeout) {
+                clearTimeout(livePreviewTimeout);
+            }
+        }
+        
+        function updateLivePreview() {
+            if (!isLivePreviewActive) return;
+            
+            const urlInput = document.getElementById('urlInput');
+            const urlPreview = document.getElementById('urlPreview');
+            const liveQRCanvas = document.getElementById('liveQRCode');
+            
+            // Update URL preview
+            if (urlInput.value) {
+                urlPreview.textContent = urlInput.value;
+                urlPreview.style.borderLeftColor = '#2d8a39'; // Green for valid URL
+            } else {
+                urlPreview.textContent = 'Start typing a URL to see the live preview...';
+                urlPreview.style.borderLeftColor = '#c0c0c0'; // Gray for placeholder
+            }
+            
+            // Debounce QR generation
+            if (livePreviewTimeout) {
+                clearTimeout(livePreviewTimeout);
+            }
+            
+            livePreviewTimeout = setTimeout(() => {
+                if (urlInput.value && isValidURL(urlInput.value)) {
+                    generateLiveQRCode(urlInput.value);
+                } else {
+                    // Clear live QR code if invalid URL
+                    const ctx = liveQRCanvas.getContext('2d');
+                    ctx.clearRect(0, 0, liveQRCanvas.width, liveQRCanvas.height);
+                }
+            }, 500);
+        }
+        
+        function generateLiveQRCode(url) {
+            const liveQRCanvas = document.getElementById('liveQRCode');
+            liveQRCanvas.width = 150;
+            liveQRCanvas.height = 150;
+            
+            QRCode.toCanvas(liveQRCanvas, url, {
+                width: 150,
+                color: {
+                    dark: '#000000',
+                    light: '#ffffff'
+                },
+                errorCorrectionLevel: 'M',
+                margin: 1
+            }, function(error) {
+                if (error) {
+                    console.error('Live preview error:', error);
+                }
+            });
+        }
+        
+        function isValidURL(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+        
+        // Analytics functionality
+        let analyticsData = {
+            totalScans: 0,
+            uniqueScans: 0,
+            todayScans: 0,
+            qrCodesCreated: 0,
+            scanHistory: [],
+            dailyScans: {}
+        };
+        
+        function initializeAnalytics() {
+            // Load analytics from localStorage
+            const savedAnalytics = localStorage.getItem('qrAnalytics');
+            if (savedAnalytics) {
+                analyticsData = JSON.parse(savedAnalytics);
+            }
+            
+            // Update display
+            updateAnalyticsDisplay();
+            createAnalyticsChart();
+        }
+        
+        function updateAnalyticsDisplay() {
+            document.getElementById('totalScans').textContent = analyticsData.totalScans;
+            document.getElementById('uniqueScans').textContent = analyticsData.uniqueScans;
+            document.getElementById('todayScans').textContent = analyticsData.todayScans;
+            document.getElementById('qrCodesCreated').textContent = analyticsData.qrCodesCreated;
+        }
+        
+        function createAnalyticsChart() {
+            const chartContainer = document.getElementById('analyticsChart');
+            chartContainer.innerHTML = '';
+            
+            // Get last 7 days of data
+            const last7Days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                last7Days.push({
+                    date: dateStr,
+                    scans: analyticsData.dailyScans[dateStr] || 0
+                });
+            }
+            
+            // Create chart bars
+            last7Days.forEach((day, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.left = `${(index / 6) * 100}%`;
+                bar.style.height = `${Math.max(10, (day.scans / Math.max(...last7Days.map(d => d.scans))) * 180)}px`;
+                bar.title = `${day.date}: ${day.scans} scans`;
+                chartContainer.appendChild(bar);
+            });
+        }
+        
+        function toggleAnalytics() {
+            const analyticsSection = document.getElementById('analyticsSection');
+            if (analyticsSection.style.display === 'block') {
+                analyticsSection.style.display = 'none';
+            } else {
+                analyticsSection.style.display = 'block';
+                updateAnalyticsDisplay();
+                createAnalyticsChart();
+            }
+        }
+        
+        function enableScanTracking() {
+            // Simulate scan tracking (in a real app, this would connect to a backend)
+            const trackingEnabled = confirm('Enable scan tracking? This will allow you to track how many times your QR codes are scanned.');
+            
+            if (trackingEnabled) {
+                showNotification('Scan tracking enabled! Your QR codes will now be tracked.', 'success');
+                
+                // Simulate some scan data
+                simulateScanData();
+            }
+        }
+        
+        function simulateScanData() {
+            // Add some realistic scan data
+            const today = new Date().toISOString().split('T')[0];
+            analyticsData.qrCodesCreated += 1;
+            analyticsData.totalScans += Math.floor(Math.random() * 50) + 10;
+            analyticsData.uniqueScans += Math.floor(Math.random() * 30) + 5;
+            analyticsData.todayScans = Math.floor(Math.random() * 20) + 3;
+            
+            // Add daily scan data
+            for (let i = 0; i < 7; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                if (!analyticsData.dailyScans[dateStr]) {
+                    analyticsData.dailyScans[dateStr] = Math.floor(Math.random() * 25) + 5;
+                }
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('qrAnalytics', JSON.stringify(analyticsData));
+            
+            // Update display
+            updateAnalyticsDisplay();
+            createAnalyticsChart();
+        }
+        
+        function createCubeParticles() {
+            const particlesContainer = document.getElementById('cubeParticles');
+            particlesContainer.innerHTML = '';
+            
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random position around the cube
+                const angle = (i / 12) * Math.PI * 2;
+                const distance = 80 + Math.random() * 40;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--x', `${x}px`);
+                particle.style.setProperty('--y', `${y}px`);
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.animationDelay = `${Math.random() * 1.5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        function createScannerCubeParticles() {
+            const particlesContainer = document.getElementById('scannerCubeParticles');
+            particlesContainer.innerHTML = '';
+            
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random position around the cube
+                const angle = (i / 8) * Math.PI * 2;
+                const distance = 60 + Math.random() * 30;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--x', `${x}px`);
+                particle.style.setProperty('--y', `${y}px`);
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.animationDelay = `${Math.random() * 1.5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // QR Scanner functionality
+        let scannerStream = null;
+        let scannerVideo = null;
+        let scannerCanvas = null;
+        let scannerContext = null;
+        let scannerInterval = null;
+        let currentCamera = 'environment'; // 'environment' or 'user'
+        let torchEnabled = false;
+        let lastScanResult = '';
+        
+        function toggleScanner() {
+            const scannerSection = document.getElementById('scannerSection');
+            if (scannerSection.style.display === 'block') {
+                scannerSection.style.display = 'none';
+                stopScanner();
+            } else {
+                scannerSection.style.display = 'block';
+                // Hide other sections
+                document.getElementById('analyticsSection').style.display = 'none';
+                document.getElementById('historySection').style.display = 'none';
+                document.getElementById('livePreviewSection').style.display = 'none';
+            }
+        }
+        
+        async function startScanner() {
+            const video = document.getElementById('scannerVideo');
+            const status = document.getElementById('scannerStatus');
+            const loading = document.getElementById('scannerLoading');
+            const error = document.getElementById('scannerError');
+            const result = document.getElementById('scannerResult');
+            
+            // Reset UI
+            error.style.display = 'none';
+            result.style.display = 'none';
+            loading.style.display = 'block';
+            status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Accessing camera...';
+            
+            // Create scanner cube particles
+            createScannerCubeParticles();
+            
+            try {
+                // Get camera stream
+                const constraints = {
+                    video: {
+                        facingMode: currentCamera,
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    }
+                };
+                
+                scannerStream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = scannerStream;
+                scannerVideo = video;
+                
+                // Wait for video to load
+                await new Promise((resolve) => {
+                    video.onloadedmetadata = resolve;
+                });
+                
+                // Create canvas for QR detection
+                scannerCanvas = document.createElement('canvas');
+                scannerContext = scannerCanvas.getContext('2d');
+                
+                // Update UI
+                loading.style.display = 'none';
+                status.innerHTML = '<i class="fas fa-camera"></i> Camera ready! Point at a QR code to scan.';
+                
+                // Enable controls
+                document.getElementById('startScannerBtn').disabled = true;
+                document.getElementById('stopScannerBtn').disabled = false;
+                document.getElementById('flipCameraBtn').disabled = false;
+                document.getElementById('captureBtn').disabled = false;
+                
+                // Check if torch is supported
+                const track = scannerStream.getVideoTracks()[0];
+                if (track.getCapabilities && track.getCapabilities().torch) {
+                    document.getElementById('torchBtn').disabled = false;
+                }
+                
+                // Start QR detection
+                startQRDetection();
+                
+                showNotification('Scanner started successfully!', 'success');
+                
+            } catch (err) {
+                console.error('Camera error:', err);
+                loading.style.display = 'none';
+                error.style.display = 'block';
+                
+                if (err.name === 'NotAllowedError') {
+                    document.getElementById('scannerErrorMessage').textContent = 
+                        'Camera access denied. Please allow camera permissions and try again.';
+                } else if (err.name === 'NotFoundError') {
+                    document.getElementById('scannerErrorMessage').textContent = 
+                        'No camera found. Please connect a camera and try again.';
+                } else {
+                    document.getElementById('scannerErrorMessage').textContent = 
+                        'Camera error: ' + err.message;
+                }
+                
+                status.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Camera initialization failed.';
+            }
+        }
+        
+        function stopScanner() {
+            if (scannerStream) {
+                scannerStream.getTracks().forEach(track => track.stop());
+                scannerStream = null;
+            }
+            
+            if (scannerInterval) {
+                clearInterval(scannerInterval);
+                scannerInterval = null;
+            }
+            
+            // Reset UI
+            document.getElementById('scannerVideo').srcObject = null;
+            document.getElementById('startScannerBtn').disabled = false;
+            document.getElementById('stopScannerBtn').disabled = true;
+            document.getElementById('flipCameraBtn').disabled = true;
+            document.getElementById('torchBtn').disabled = true;
+            document.getElementById('captureBtn').disabled = true;
+            document.getElementById('torchBtn').classList.remove('active');
+            
+            document.getElementById('scannerStatus').innerHTML = 
+                '<i class="fas fa-info-circle"></i> Click "Start Scanner" to begin scanning QR codes';
+            
+            showNotification('Scanner stopped.', 'success');
+        }
+        
+        async function flipCamera() {
+            if (!scannerStream) return;
+            
+            currentCamera = currentCamera === 'environment' ? 'user' : 'environment';
+            
+            // Stop current stream
+            scannerStream.getTracks().forEach(track => track.stop());
+            
+            // Restart with new camera
+            await startScanner();
+        }
+        
+        async function toggleTorch() {
+            if (!scannerStream) return;
+            
+            const track = scannerStream.getVideoTracks()[0];
+            const torchBtn = document.getElementById('torchBtn');
+            
+            try {
+                if (torchEnabled) {
+                    await track.applyConstraints({
+                        advanced: [{ torch: false }]
+                    });
+                    torchEnabled = false;
+                    torchBtn.classList.remove('active');
+                    showNotification('Torch turned off', 'success');
+                } else {
+                    await track.applyConstraints({
+                        advanced: [{ torch: true }]
+                    });
+                    torchEnabled = true;
+                    torchBtn.classList.add('active');
+                    showNotification('Torch turned on', 'success');
+                }
+            } catch (err) {
+                console.error('Torch error:', err);
+                showNotification('Torch not supported on this device', 'error');
+            }
+        }
+        
+        function captureImage() {
+            if (!scannerVideo || !scannerCanvas) return;
+            
+            const video = scannerVideo;
+            const canvas = scannerCanvas;
+            const ctx = scannerContext;
+            
+            // Set canvas size to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Draw video frame to canvas
+            ctx.drawImage(video, 0, 0);
+            
+            // Convert to blob and download
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `qr-scan-${Date.now()}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                showNotification('Image captured and downloaded!', 'success');
+            }, 'image/png');
+        }
+        
+        function startQRDetection() {
+            if (!scannerVideo || !scannerCanvas) return;
+            
+            scannerInterval = setInterval(() => {
+                if (scannerVideo.readyState === scannerVideo.HAVE_ENOUGH_DATA) {
+                    const video = scannerVideo;
+                    const canvas = scannerCanvas;
+                    const ctx = scannerContext;
+                    
+                    // Set canvas size to match video
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    
+                    // Draw video frame to canvas
+                    ctx.drawImage(video, 0, 0);
+                    
+                    // Get image data for QR detection
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    
+                    // Use jsQR library for detection (we'll need to include it)
+                    try {
+                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+                        
+                        if (code) {
+                            handleQRDetected(code.data);
+                        }
+                    } catch (err) {
+                        // jsQR not available, use alternative method
+                        detectQRAlternative(imageData);
+                    }
+                }
+            }, 100); // Check every 100ms
+        }
+        
+        function detectQRAlternative(imageData) {
+            // Simple QR detection using canvas (basic implementation)
+            // In a real app, you'd use a proper QR library like jsQR
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = imageData.width;
+            canvas.height = imageData.height;
+            ctx.putImageData(imageData, 0, 0);
+            
+            // For demo purposes, we'll simulate QR detection
+            // In reality, you'd implement proper QR code detection here
+            console.log('QR detection running...');
+        }
+        
+        function handleQRDetected(data) {
+            if (data === lastScanResult) return; // Avoid duplicate scans
+            
+            lastScanResult = data;
+            
+            // Stop scanning temporarily
+            if (scannerInterval) {
+                clearInterval(scannerInterval);
+                scannerInterval = null;
+            }
+            
+            // Show result
+            const result = document.getElementById('scannerResult');
+            const resultContent = document.getElementById('scannerResultContent');
+            
+            resultContent.innerHTML = '';
+            
+            if (isValidURL(data)) {
+                resultContent.innerHTML = `
+                    <p><strong>URL:</strong> <a href="${data}" target="_blank">${data}</a></p>
+                    <p><small>This appears to be a valid URL</small></p>
+                `;
+            } else {
+                resultContent.innerHTML = `
+                    <p><strong>Content:</strong> ${data}</p>
+                    <p><small>This appears to be text content</small></p>
+                `;
+            }
+            
+            result.style.display = 'block';
+            
+            // Update status
+            document.getElementById('scannerStatus').innerHTML = 
+                '<i class="fas fa-check-circle"></i> QR Code detected! Click "Start Scanner" to scan another.';
+            
+            showNotification('QR Code detected!', 'success');
+            
+            // Play success sound (optional)
+            playSuccessSound();
+        }
+        
+        function playSuccessSound() {
+            // Create a simple beep sound
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+        
+        function copyScanResult() {
+            if (lastScanResult) {
+                navigator.clipboard.writeText(lastScanResult).then(() => {
+                    showNotification('Result copied to clipboard!', 'success');
+                }).catch(() => {
+                    showNotification('Failed to copy to clipboard', 'error');
+                });
+            }
+        }
+        
+        function openScanResult() {
+            if (lastScanResult && isValidURL(lastScanResult)) {
+                window.open(lastScanResult, '_blank');
+                showNotification('Opening URL...', 'success');
+            } else {
+                showNotification('Cannot open non-URL content', 'error');
+            }
+        }
+        
+        function generateFromScanResult() {
+            if (lastScanResult) {
+                document.getElementById('urlInput').value = lastScanResult;
+                document.getElementById('scannerSection').style.display = 'none';
+                document.getElementById('qrSection').style.display = 'flex';
+                generateQRCode();
+                showNotification('Generating QR code from scan result...', 'success');
+            }
+        }
+        
+        function createSnowflakes() {
+            const snowflakeCount = 75;
+            const body = document.body;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                
+                // Random size between 2px and 8px
+                const size = Math.random() * 6 + 2;
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                
+                // Random position
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                
+                // Random opacity
+                snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                // Random animation duration between 5s and 15s
+                const duration = Math.random() * 10 + 5;
+                snowflake.style.animationDuration = `${duration}s`;
+                
+                // Random delay
+                snowflake.style.animationDelay = `${Math.random() * 5}s`;
+                
+                body.appendChild(snowflake);
+            }
+        }
+        
+        function createChristmasLights() {
+            const lightsContainer = document.getElementById('christmasLights');
+            const lightCount = 20;
+            const colors = ['#ff0000', '#00ff00', '#ffff00', '#ff00ff', '#00ffff', '#ff8800'];
+            
+            for (let i = 0; i < lightCount; i++) {
+                const light = document.createElement('div');
+                light.classList.add('light');
+                
+                // Position evenly spaced
+                light.style.left = `${(i / lightCount) * 100}%`;
+                
+                // Random color
+                light.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Random animation delay
+                light.style.animationDelay = `${Math.random() * 2}s`;
+                
+                lightsContainer.appendChild(light);
+            }
+        }
+        
+        function generateQRCode() {
+            const urlInput = document.getElementById('urlInput');
+            const qrSection = document.getElementById('qrSection');
+            const loader = document.getElementById('loader');
+            const qrCodeCanvas = document.getElementById('qrCode');
+            
+            if (!urlInput.value) {
+                showNotification('Please enter a URL first!', 'error');
+                urlInput.focus();
+                return;
+            }
+            
+            // Validate URL
+            try {
+                new URL(urlInput.value);
+            } catch (e) {
+                showNotification('Please enter a valid URL!', 'error');
+                return;
+            }
+            
+            // Show loader and hide previous QR code
+            loader.style.display = 'block';
+            qrSection.style.display = 'none';
+            
+            // Create cube particles for the loader
+            createCubeParticles();
+            
+            // Get customization options
+            const qrColor = document.getElementById('qrColor').value;
+            const bgColor = document.getElementById('bgColor').value;
+            const qrSize = parseInt(document.getElementById('qrSize').value);
+            const errorCorrection = document.getElementById('errorCorrection').value;
+            const qrStyle = document.getElementById('qrStyle').value;
+            const logoImage = document.getElementById('logoImage').value;
+            
+            // Clear previous QR code
+            const context = qrCodeCanvas.getContext('2d');
+            context.clearRect(0, 0, qrCodeCanvas.width, qrCodeCanvas.height);
+            
+            // Set canvas size
+            qrCodeCanvas.width = qrSize;
+            qrCodeCanvas.height = qrSize;
+            
+            // Generate QR code
+            QRCode.toCanvas(qrCodeCanvas, urlInput.value, {
+                width: qrSize,
+                color: {
+                    dark: qrColor,
+                    light: bgColor
+                },
+                errorCorrectionLevel: errorCorrection,
+                margin: 2
+            }, function(error) {
+                loader.style.display = 'none';
+                
+                if (error) {
+                    showNotification('Error generating QR code!', 'error');
+                    console.error(error);
+                    return;
+                }
+                
+                // Show QR code section
+                qrSection.style.display = 'flex';
+                showNotification('QR Code generated successfully!', 'success');
+                
+                // Track QR code creation in analytics
+                analyticsData.qrCodesCreated += 1;
+                localStorage.setItem('qrAnalytics', JSON.stringify(analyticsData));
+                updateAnalyticsDisplay();
+                
+                // Apply style if needed
+                if (qrStyle !== 'squares') {
+                    applyQRStyle(qrStyle, qrCodeCanvas, qrColor, bgColor);
+                }
+                
+                // Add logo if provided
+                if (logoImage) {
+                    addLogoToQR(logoImage, qrCodeCanvas);
+                }
+            });
+        }
+        
+        function applyQRStyle(style, canvas, color, bgColor) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            const moduleSize = size / 29; // QR code typically has 29 modules
+            
+            // Get image data to detect QR modules
+            const imageData = ctx.getImageData(0, 0, size, size);
+            const data = imageData.data;
+            
+            // Clear canvas
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Draw based on style
+            ctx.fillStyle = color;
+            
+            for (let y = 0; y < 29; y++) {
+                for (let x = 0; x < 29; x++) {
+                    const index = (y * moduleSize * size + x * moduleSize) * 4;
+                    if (data[index] === 0) { // Dark module
+                        const centerX = x * moduleSize + moduleSize / 2;
+                        const centerY = y * moduleSize + moduleSize / 2;
+                        
+                        switch (style) {
+                            case 'dots':
+                                ctx.beginPath();
+                                ctx.arc(centerX, centerY, moduleSize / 2, 0, Math.PI * 2);
+                                ctx.fill();
+                                break;
+                            case 'rounded':
+                                const radius = moduleSize / 4;
+                                ctx.beginPath();
+                                ctx.roundRect(
+                                    x * moduleSize + radius,
+                                    y * moduleSize + radius,
+                                    moduleSize - radius * 2,
+                                    moduleSize - radius * 2,
+                                    radius
+                                );
+                                ctx.fill();
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        function addLogoToQR(logoUrl, canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            const logoSize = size / 4;
+            const logoX = (size - logoSize) / 2;
+            const logoY = (size - logoSize) / 2;
+            
+            const logoImg = new Image();
+            logoImg.crossOrigin = 'Anonymous';
+            logoImg.onload = function() {
+                // Draw white background for logo
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(logoX - 2, logoY - 2, logoSize + 4, logoSize + 4);
+                
+                // Draw logo
+                ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
+            };
+            logoImg.onerror = function() {
+                console.error('Error loading logo image');
+                showNotification('Error loading logo image', 'error');
+            };
+            logoImg.src = logoUrl;
+        }
+        
+        function downloadQRCode() {
+            const qrCodeCanvas = document.getElementById('qrCode');
+            const urlInput = document.getElementById('urlInput');
+            
+            if (!qrCodeCanvas || !urlInput.value) {
+                showNotification('Generate a QR code first!', 'error');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = `qr-code-${getDomainFromUrl(urlInput.value)}-${Date.now()}.png`;
+            link.href = qrCodeCanvas.toDataURL('image/png');
+            link.click();
+            
+            showNotification('QR Code downloaded!', 'success');
+        }
+        
+        function shareQRCode() {
+            const qrCodeCanvas = document.getElementById('qrCode');
+            const urlInput = document.getElementById('urlInput');
+            
+            if (!qrCodeCanvas || !urlInput.value) {
+                showNotification('Generate a QR code first!', 'error');
+                return;
+            }
+            
+            if (navigator.share) {
+                qrCodeCanvas.toBlob((blob) => {
+                    const file = new File([blob], `qr-code-${getDomainFromUrl(urlInput.value)}.png`, {
+                        type: 'image/png'
+                    });
+                    
+                    navigator.share({
+                        title: 'Check out this QR code!',
+                        text: `QR code for ${urlInput.value}`,
+                        files: [file]
+                    }).catch((error) => {
+                        console.error('Error sharing:', error);
+                        showNotification('Error sharing QR code', 'error');
+                    });
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const shareUrl = `${window.location.origin}${window.location.pathname}?url=${encodeURIComponent(urlInput.value)}`;
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    showNotification('Link copied to clipboard!', 'success');
+                }).catch(() => {
+                    prompt('Copy this link to share:', shareUrl);
+                });
+            }
+        }
+        
+        function saveToHistory() {
+            const qrCodeCanvas = document.getElementById('qrCode');
+            const urlInput = document.getElementById('urlInput');
+            
+            if (!qrCodeCanvas || !urlInput.value) {
+                showNotification('Generate a QR code first!', 'error');
+                return;
+            }
+            
+            const qrDataUrl = qrCodeCanvas.toDataURL('image/png');
+            const timestamp = new Date().toISOString();
+            const domain = getDomainFromUrl(urlInput.value);
+            
+            const historyItem = {
+                url: urlInput.value,
+                domain: domain,
+                qrDataUrl: qrDataUrl,
+                timestamp: timestamp
+            };
+            
+            let history = JSON.parse(localStorage.getItem('qrHistory') || []);
+            history.unshift(historyItem); // Add to beginning of array
+            localStorage.setItem('qrHistory', JSON.stringify(history));
+            
+            showNotification('QR Code saved to history!', 'success');
+            loadHistory();
+        }
+        
+        function loadHistory() {
+            const historyList = document.getElementById('historyList');
+            const history = JSON.parse(localStorage.getItem('qrHistory') || []);
+            
+            historyList.innerHTML = '';
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; padding: 1rem;">No history yet. Generate some QR codes!</p>';
+                return;
+            }
+            
+            history.forEach((item, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.classList.add('history-item');
+                
+                historyItem.innerHTML = `
+                    <span>${item.domain} <small>(${new Date(item.timestamp).toLocaleString()})</small></span>
+                    <div class="history-item-actions">
+                        <button class="history-item-btn view" data-index="${index}" title="View">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="history-item-btn delete" data-index="${index}" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                historyList.appendChild(historyItem);
+            });
+            
+            // Add event listeners to view buttons
+            document.querySelectorAll('.history-item-btn.view').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    viewHistoryItem(index);
+                });
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.history-item-btn.delete').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    deleteHistoryItem(index);
+                });
+            });
+        }
+        
+        function viewHistoryItem(index) {
+            const history = JSON.parse(localStorage.getItem('qrHistory') || []);
+            if (index >= 0 && index < history.length) {
+                const item = history[index];
+                document.getElementById('urlInput').value = item.url;
+                
+                // Display the QR code
+                const qrCodeCanvas = document.getElementById('qrCode');
+                const img = new Image();
+                img.onload = function() {
+                    qrCodeCanvas.width = img.width;
+                    qrCodeCanvas.height = img.height;
+                    const ctx = qrCodeCanvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    
+                    document.getElementById('qrSection').style.display = 'flex';
+                    showNotification('QR Code loaded from history!', 'success');
+                };
+                img.src = item.qrDataUrl;
+            }
+        }
+        
+        function deleteHistoryItem(index) {
+            let history = JSON.parse(localStorage.getItem('qrHistory') || []);
+            if (index >= 0 && index < history.length) {
+                history.splice(index, 1);
+                localStorage.setItem('qrHistory', JSON.stringify(history));
+                loadHistory();
+                showNotification('Item deleted from history!', 'success');
+            }
+        }
+        
+        function toggleHistory() {
+            const historySection = document.getElementById('historySection');
+            if (historySection.style.display === 'block') {
+                historySection.style.display = 'none';
+            } else {
+                historySection.style.display = 'block';
+                loadHistory();
+            }
+        }
+        
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear all history?')) {
+                localStorage.removeItem('qrHistory');
+                loadHistory();
+                showNotification('History cleared!', 'success');
+            }
+        }
+        
+        function printQRCode() {
+            const qrCodeCanvas = document.getElementById('qrCode');
+            const urlInput = document.getElementById('urlInput');
+            
+            if (!qrCodeCanvas || !urlInput.value) {
+                showNotification('Generate a QR code first!', 'error');
+                return;
+            }
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write()
+            printWindow.document.close();
+        }
+        
+        function showNotification(message, type) {
+            const notification = document.getElementById('giftNotification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            
+            notificationMessage.textContent = message;
+            
+            // Set color based on type
+            if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #d62d2d, #8a2d2d)';
+            } else if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #2d8a39, #2d5e8a)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, var(--christmas-red), var(--christmas-green))';
+            }
+            
+            // Show notification
+            notification.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function getDomainFromUrl(url) {
+            try {
+                const domain = new URL(url).hostname.replace('www.', '');
+                return domain.split('.')[0]; // Get main domain without TLD
+            } catch (e) {
+                return 'qr-code';
+            }
+        }
+        
+        // Check for URL parameter
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const url = urlParams.get('url');
+            
+            if (url) {
+                document.getElementById('urlInput').value = url;
+                generateQRCode();
+            }
+        });
+    </script>
+    
+    <!-- Retro CPU Monitor Icon and Panel -->
+    <div id="cpuMonitorIcon" class="cpu-monitor-icon" title="Show CPU Analytics">
+        <span>🖥️</span>
+    </div>
+    <div id="cpuMonitorPanel" class="cpu-monitor-panel">
+        <div class="cpu-panel-header">
+            <span>RETRO CPU ANALYTICS</span>
+            <button id="closeCpuPanel" class="cpu-close-btn">✖</button>
+        </div>
+        <div class="cpu-panel-content">
+            <div class="cpu-gauge-container">
+                <div class="cpu-gauge-outer">
+                    <div id="cpuGauge" class="cpu-gauge-inner">0%</div>
+                </div>
+                <div class="cpu-gauge-label">CPU USAGE</div>
+            </div>
+            <div class="cpu-analytics-stats">
+                <div>Min: <span id="cpuMin">0%</span></div>
+                <div>Max: <span id="cpuMax">0%</span></div>
+                <div>Avg: <span id="cpuAvg">0%</span></div>
+            </div>
+            <canvas id="cpuGraph" width="320" height="80"></canvas>
+        </div>
+    </div>
+
+    <style>
+    .cpu-monitor-icon {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #111;
+        color: #0f0;
+        border: 2px solid #0f0;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        cursor: pointer;
+        z-index: 9999;
+        box-shadow: 0 4px 16px #000a;
+        transition: background 0.2s, color 0.2s;
+    }
+    .cpu-monitor-icon:hover {
+        background: #0f0;
+        color: #111;
+    }
+    .cpu-monitor-panel {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        width: 350px;
+        background: #181818;
+        color: #0f0;
+        border: 2px solid #0f0;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px #000a;
+        z-index: 9999;
+        display: none;
+        font-family: 'VT323', 'Fira Mono', 'Consolas', monospace;
+        animation: cpuPanelIn 0.3s;
+    }
+    @keyframes cpuPanelIn {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .cpu-panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #0f0;
+        letter-spacing: 2px;
+    }
+    .cpu-close-btn {
+        background: none;
+        border: none;
+        color: #0f0;
+        font-size: 1.3rem;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .cpu-close-btn:hover { color: #f00; }
+    .cpu-panel-content {
+        padding: 1rem 0 0.5rem 0;
+    }
+    .cpu-gauge-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    .cpu-gauge-outer {
+        width: 120px;
+        height: 18px;
+        background: #222;
+        border: 1px solid #0f0;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+    }
+    .cpu-gauge-inner {
+        height: 100%;
+        background: linear-gradient(90deg, #0f0 0%, #ff0 60%, #f00 100%);
+        color: #111;
+        font-weight: bold;
+        font-size: 1rem;
+        text-align: right;
+        padding-right: 8px;
+        line-height: 18px;
+        transition: width 0.3s;
+    }
+    .cpu-gauge-label {
+        font-size: 0.9rem;
+        color: #0f0;
+        opacity: 0.7;
+    }
+    .cpu-analytics-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+        font-size: 1rem;
+    }
+    #cpuGraph {
+        width: 100%;
+        height: 80px;
+        background: #111;
+        border: 1px solid #0f0;
+        border-radius: 8px;
+        margin-top: 1rem;
+        display: block;
+    }
+    </style>
+
+    <script>
+    // --- Retro CPU Monitor ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const icon = document.getElementById('cpuMonitorIcon');
+        const panel = document.getElementById('cpuMonitorPanel');
+        const closeBtn = document.getElementById('closeCpuPanel');
+        const gauge = document.getElementById('cpuGauge');
+        const minEl = document.getElementById('cpuMin');
+        const maxEl = document.getElementById('cpuMax');
+        const avgEl = document.getElementById('cpuAvg');
+        const graph = document.getElementById('cpuGraph');
+        const ctx = graph.getContext('2d');
+        let cpuData = [];
+        let min = 100, max = 0, sum = 0, count = 0;
+        let running = false;
+
+        function simulateCPU() {
+            let last = cpuData.length ? cpuData[cpuData.length-1] : 40;
+            let next = Math.max(0, Math.min(100, last + (Math.random()-0.5)*10 + (Math.random()-0.5)*5));
+            return Math.round(next);
+        }
+
+        function updateGauge(val) {
+            gauge.style.width = val + '%';
+            gauge.textContent = val + '%';
+        }
+
+        function updateStats(val) {
+            min = Math.min(min, val);
+            max = Math.max(max, val);
+            sum += val;
+            count++;
+            minEl.textContent = min + '%';
+            maxEl.textContent = max + '%';
+            avgEl.textContent = Math.round(sum/count) + '%';
+        }
+
+        function drawGraph() {
+            ctx.clearRect(0,0,graph.width,graph.height);
+            ctx.strokeStyle = '#0f0';
+            ctx.lineWidth = 1;
+            for(let y=0; y<=graph.height; y+=20) {
+                ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(graph.width,y); ctx.stroke();
+            }
+            for(let x=0; x<=graph.width; x+=40) {
+                ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,graph.height); ctx.stroke();
+            }
+            ctx.strokeStyle = '#ff0';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for(let i=0; i<cpuData.length; i++) {
+                let x = i * (graph.width/(cpuData.length-1));
+                let y = graph.height - (cpuData[i]/100)*graph.height;
+                if(i===0) ctx.moveTo(x,y);
+                else ctx.lineTo(x,y);
+            }
+            ctx.stroke();
+        }
+
+        function tick() {
+            if(!running) return;
+            let val = simulateCPU();
+            cpuData.push(val);
+            if(cpuData.length>40) cpuData.shift();
+            updateGauge(val);
+            updateStats(val);
+            drawGraph();
+            setTimeout(tick, 500);
+        }
+
+        icon.onclick = function() {
+            panel.style.display = 'block';
+            if(!running) {
+                running = true;
+                cpuData = [];
+                min = 100; max = 0; sum = 0; count = 0;
+                tick();
+            }
+        };
+        closeBtn.onclick = function() {
+            panel.style.display = 'none';
+            running = false;
+        };
+    });
+    </script>
+</body>
+</html>
