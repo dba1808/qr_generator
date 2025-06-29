@@ -4,7 +4,7 @@
 
 Convert any URL into a **customizable, Christmas-themed QR code** with animated snow, twinkling lights, and a flying Santa! Perfect for holiday marketing, events, or just spreading cheer.  
 
-🔗 **[https://santaqrgenerator.netlify.app/]** *(Replace with your deployed link)*  
+🔗 **[https://santaqrgenerator.netlify.app/]**  
 
 ---
 
